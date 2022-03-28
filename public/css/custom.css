@@ -1,0 +1,161 @@
+/*.sidebar-dark .sidebar .sidebar-header {*/
+/*    background: red !important;*/
+/*    border-bottom: 1px solid !important;*/
+/*    border-right: 1px solid !important;*/
+/*}*/
+/*.sidebar-dark .sidebar .sidebar-body {*/
+/*    background: red !important;*/
+/*    border-right: red !important;*/
+/*}
+
+
+
+a {
+    color: #00897b;
+}
+
+span::before {
+    color: #00897b;
+}
+
+span:hover {
+    color: #00897b;
+}
+
+.noble-ui-logo span {
+    color: #00897b !important;
+    font-weight: 300;
+}
+
+
+.form-check .form-check-label input[type="checkbox"] + .input-frame:before {
+    content: "";
+    width: 18px;
+    height: 18px;
+    border-radius: 2px;
+    border: solid #00897b !important;
+    border-width: 2px;
+    -webkit-transition: all;
+    -moz-transition: all;
+    -ms-transition: all;
+    -o-transition: all;
+    transition: all;
+    transition-duration: 0s;
+    -webkit-transition-duration: 250ms;
+    transition-duration: 250ms; }
+
+.form-check .form-check-label input[type="checkbox"]:checked + .input-frame:before {
+    background: #00897b !important;
+    border-width: 0; }
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #00897b;
+    border-color: #00897b;
+}
+
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #00897b;
+    border-color: #00897b;
+}
+
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #00897b;
+    border-color: #00897b;
+}
+
+.sidebar .sidebar-header .sidebar-brand span {
+    color: #00897b;
+}
+
+.sidebar .sidebar-body .nav .nav-item.active .nav-link::before {
+    content: '';
+    width: 3px;
+    height: 26px;
+    background: #4db6ac !important;
+    position: absolute;
+    left: -25px;
+}
+
+.sidebar .sidebar-header .sidebar-brand span {
+    color: #4db6ac !important;
+    font-weight: 300;
+}
+
+.sidebar .sidebar-body .nav .nav-item.active .nav-link .link-icon {
+    color: #4db6ac !important;
+}
+
+.sidebar .sidebar-body .nav .nav-item:hover .nav-link .link-icon {
+    color: #4db6ac !important;
+}
+
+.sidebar .sidebar-body .nav .nav-item .nav-link[aria-expanded="true"] {
+    color: #4db6ac !important;
+}
+
+.sidebar-dark .sidebar .sidebar-body .nav .nav-item:hover .nav-link
+.link-title, .sidebar-dark .sidebar .sidebar-body
+.nav .nav-item.active .nav-link .link-title {
+    color: #4db6ac !important;
+}
+
+.navbar .navbar-content .navbar-nav .nav-item.nav-profile .dropdown-menu .dropdown-body .profile-nav .nav-item:hover .nav-link {
+    color: #4db6ac; }
+.navbar .navbar-content .navbar-nav .nav-item.nav-apps .dropdown-menu .dropdown-body .dropdown-item:hover .arrow, .navbar .navbar-content .navbar-nav .nav-item.nav-notifications .dropdown-menu .dropdown-body .dropdown-item:hover .arrow, .navbar .navbar-content .navbar-nav .nav-item.nav-messages .dropdown-menu .dropdown-body .dropdown-item:hover .arrow {
+    color: #4db6ac; }
+.navbar .navbar-content .navbar-nav .nav-item.nav-apps .dropdown-menu .dropdown-body .dropdown-item:nth-child(1):hover .arrow, .navbar .navbar-content .navbar-nav .nav-item.nav-notifications .dropdown-menu .dropdown-body .dropdown-item:nth-child(1):hover .arrow, .navbar .navbar-content .navbar-nav .nav-item.nav-messages .dropdown-menu .dropdown-body .dropdown-item:nth-child(1):hover .arrow {
+    color: #4db6ac; }
+.navbar .navbar-content .navbar-nav .nav-item.nav-apps .dropdown-menu .dropdown-body .dropdown-item:nth-child(1) .icon svg, .navbar .navbar-content .navbar-nav .nav-item.nav-notifications .dropdown-menu .dropdown-body .dropdown-item:nth-child(1) .icon svg, .navbar .navbar-content .navbar-nav .nav-item.nav-messages .dropdown-menu .dropdown-body .dropdown-item:nth-child(1) .icon svg {
+    color: #4db6ac; }
+
+.sidebar .sidebar-body .nav .nav-item.active .nav-link::before {
+    content: '';
+    width: 3px;
+    height: 26px;
+    background: #4db6ac !important;
+    position: absolute;
+    left: -25px;
+}
+
+.navbar .navbar-content .navbar-nav .nav-item .nav-link:hover,
+.navbar .navbar-content .navbar-nav .nav-item .nav-link[aria-expanded="true"] {
+    color: #4db6ac; }
+
+.btn-primary, .swal2-modal .swal2-actions button.swal2-confirm, .wizard > .actions a, .wizard > .actions a:hover {
+    color: #fff;
+    background-color: #00897b !important;
+    border-color: #00897b !important; }
+.btn-primary:hover, .swal2-modal .swal2-actions button.swal2-confirm:hover, .wizard > .actions a:hover {
+    color: #fff;
+    background-color: #00695c !important;
+    border-color: #004d40 !important; }
+.btn-primary:focus, .swal2-modal .swal2-actions button.swal2-confirm:focus, .wizard > .actions a:focus, .btn-primary.focus, .swal2-modal .swal2-actions button.focus.swal2-confirm, .wizard > .actions a.focus {
+    color: #fff;
+    background-color: #00695c !important;
+    border-color: #004d40 !important;
+    box-shadow: #00897b !important; }
+.btn-primary.disabled, .swal2-modal .swal2-actions button.disabled.swal2-confirm, .wizard > .actions a.disabled, .btn-primary:disabled, .swal2-modal .swal2-actions button.swal2-confirm:disabled, .wizard > .actions a:disabled {
+    color: #fff;
+    background-color: #00897b !important;
+    border-color: #00897b !important; }
+.btn-primary:not(:disabled):not(.disabled):active, .swal2-modal .swal2-actions button.swal2-confirm:not(:disabled):not(.disabled):active, .wizard > .actions a:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .swal2-modal .swal2-actions button.swal2-confirm:not(:disabled):not(.disabled).active, .wizard > .actions a:not(:disabled):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle,
+.swal2-modal .swal2-actions .show > button.dropdown-toggle.swal2-confirm,
+.wizard > .actions .show > a.dropdown-toggle {
+    color: #fff;
+    background-color: #004d40 !important;
+    border-color: #004d40 !important; }
+.btn-primary:not(:disabled):not(.disabled):active:focus, .swal2-modal .swal2-actions button.swal2-confirm:not(:disabled):not(.disabled):active:focus, .wizard > .actions a:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus, .swal2-modal .swal2-actions button.swal2-confirm:not(:disabled):not(.disabled).active:focus, .wizard > .actions a:not(:disabled):not(.disabled).active:focus,
+.show > .btn-primary.dropdown-toggle:focus,
+.swal2-modal .swal2-actions .show > button.dropdown-toggle.swal2-confirm:focus,
+.wizard > .actions .show > a.dropdown-toggle:focus {
+    box-shadow: #00897b !important; }
+*/
