@@ -69,7 +69,7 @@
                                     <label for="Designation">Designation</label>
                                     <input type="text" placeholder="Designation"
                                            class="form-control @error('Designation') is-invalid @enderror" name="Designation"
-                                           value="{{ old('Designation') }}" required>
+                                           value="{{ old('Designation') }}" >
                                     @error('Designation')
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -82,7 +82,7 @@
                                     <label for="Email">Email address</label>
                                     <input type="email" placeholder="Email"
                                            class="form-control @error('Email') is-invalid @enderror" name="Email"
-                                           value="{{ old('Email') }}" required >
+                                           value="{{ old('Email') }}" >
                                     @error('Email')
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SampleController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\MyProjectController;
 use App\Http\Controllers\UserManagerController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -40,4 +41,13 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::resource('usermanager', UserManagerController::class);
 
     Route::resource('projects', ProjectController::class);
+    Route::get('/my_project', [MyProjectController::class, 'index'])->name('my_project.index');
+    Route::get('/{id}/edit', [MyProjectController::class, 'edit'])->name('my_project.edit');
+    Route::post('/update/{id}', [MyProjectController::class, 'update'])->name('my_project.update');
+    Route::post('/destroy/{id}', [MyProjectController::class, 'destroy'])->name('my_project.destroy');
+    Route::get('/platform_wise/{id}', [MyProjectController::class, 'platform_wise'])->name('my_project.platform_wise');
+
 });
+
+Route::get('/project_export', [ProjectController::class, 'project_export'])->name('excel.project_export');
+Route::get('/my_project_export', [MyProjectController::class, 'my_project_export'])->name('excel.my_project_export');

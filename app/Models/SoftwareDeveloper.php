@@ -17,4 +17,9 @@ class SoftwareDeveloper extends Model
     {
         return $this->belongsTo(Developer::class, 'DeveloperID', 'DeveloperID');
     }
+
+    public function projects()
+    {
+        return $this->belongsTo(Project::class, 'SoftwareID', 'SoftwareID');
+    }
 }

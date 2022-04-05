@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Project;
+use App\Models\SoftwarePlatform;
 
 if (!function_exists('get_period')) {
     function get_period()
@@ -24,6 +25,22 @@ if (!function_exists('mssql_escape')) {
             $str = stripslashes(nl2br($str));
         }
         return str_replace("'", "''", $str);
+    }
+}
+
+if (!function_exists('get_project_count')) {
+    function get_project_count($StatusID)
+    {
+        $total_count = Project::where('StatusID',$StatusID)->count();
+        return $total_count;
+    }
+}
+
+if (!function_exists('get_project_platform_wise_count')) {
+    function get_project_platform_wise_count($PlatformID)
+    {
+        $total_count = SoftwarePlatform::where('PlatformID', $PlatformID)->count();
+        return $total_count;
     }
 }
 

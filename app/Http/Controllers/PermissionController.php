@@ -17,7 +17,7 @@ class PermissionController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Permission::all();
+            $data = Permission::where('id','!=',1)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('status',function($row){

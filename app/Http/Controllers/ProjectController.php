@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProjectsExport;
 use App\Models\Department;
 use App\Models\Developer;
 use App\Models\Platform;
@@ -13,13 +14,14 @@ use App\Models\Status;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class ProjectController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:Project']);
+        //$this->middleware(['permission:Project']);
     }
     /**
      * Display a listing of the resource.
@@ -41,7 +43,7 @@ class ProjectController extends Controller
                     } elseif ($row->StatusID == 2) {
                         return '<span  class="badge badge-pill badge-primary">In Progress</span>';
                     } else {
-                        return '<span  class="badge badge-pill badge-secondary">In Progress</span>';
+                        return '<span  class="badge badge-pill badge-secondary">New</span>';
                     }
                 })
                 ->addColumn('platform_name', function ($row) {
@@ -83,9 +85,12 @@ class ProjectController extends Controller
                     }
                     return $sub;
                 })
+                ->addColumn('ImplementationDate', function ($row) {
+                    return isset($row->ImplementationDate) ? date("Y-m-d", strtotime($row->ImplementationDate)) : '';
+                })
                 ->addColumn('action', function ($row) {
                     $buttons = '';
-                    //$buttons .= '<a href="' . route('projects.show', $row->SoftwareID) . '"> <button class="btn btn-warning btn-xs">Show</button> </a>';
+                    $buttons .= '<a href="' . route('projects.show', $row->SoftwareID) . '"> <button class="btn btn-warning btn-xs">Show</button> </a>';
                     $buttons .= '<a href="' . route('projects.edit', $row->SoftwareID) . '"> <button class="btn btn-info btn-xs">Edit</button> </a>';
                     //$buttons .= '<button class="btn btn-danger btn-xs" onclick="deleteConfirmation(' . $row->SoftwareID . ')">Delete</button>';
                     return $buttons;
@@ -126,15 +131,29 @@ class ProjectController extends Controller
             'StatusID' => 'required'
         ]);
 
-        $SoftwareID = get_software_id();
         //dd($SoftwareID);
+        $duplicate = Project::where('SoftwareName', $request->SoftwareName)->first();
 
-        $project = new Project();
-        $project->SoftwareID = $SoftwareID;
-        $project->SoftwareName = $request->SoftwareName;
-        $project->Description = $request->Description;
+        //dd($duplicate);
+        if ($duplicate == null) {
+            $project = new Project();
+            $SoftwareID = get_software_id();
+            $project->SoftwareID = $SoftwareID;
+        } else {
+            $project =  Project::where('SoftwareID', $duplicate->SoftwareID)->first();
+            $SoftwareID = $project->SoftwareID;
+            Toastr::warning('This project already exists', 'Warning', ["positionClass" => "toast-top-right"]);
+            return redirect()->route('projects.show', $project->SoftwareID);
+        }
+
+        $project->SoftwareName = isset($request->SoftwareName) ? $request->SoftwareName : '';
+        $project->Description = isset($request->Description) ? $request->Description : '';
         $project->Unit = "D";
+        $project->NumberOfUser = isset($request->NumberOfUser) ? $request->NumberOfUser : '';
+        $project->ImplementationDate = date("Y-m-d", strtotime($request->ImplementationDate));
+        $project->ContactPerson = isset($request->ContactPerson) ? $request->ContactPerson : '';
         $project->StatusID = $request->StatusID;
+        $project->EntryBy = Auth::user()->UserID;
         if ($project->save() == true) {
             for ($i = 0; $i < count($request->SoftwarePlatform); $i++) {
                 $software_platform = new SoftwarePlatform();
@@ -162,7 +181,11 @@ class ProjectController extends Controller
         } else {
             Toastr::error('Data not inserted', 'Opps!', ["positionClass" => "toast-top-right"]);
         }
-        return redirect()->route('projects.index');
+        if (Auth::user()->UserID == '123456') {
+            return redirect()->route('projects.index');
+        } else {
+            return redirect()->route('my_project.index');
+        }
     }
 
     /**
@@ -173,15 +196,17 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return view('projects.show', compact('project'));
+        $status = Status::all();
+        $platform = Platform::all();
+        $developers = Developer::all();
+        $departments = Department::all();
+
+        $user_platform = SoftwarePlatform::where('SoftwareID', $project->SoftwareID)->get();
+        $user_developers = SoftwareDeveloper::where('SoftwareID', $project->SoftwareID)->get();
+        $user_departments = SoftwareDepartment::where('SoftwareID', $project->SoftwareID)->get();
+        return view('projects.show', compact('project', 'status', 'platform', 'developers', 'departments', 'user_platform', 'user_developers', 'user_departments'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Project  $project
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
-     */
     public function edit(Project $project)
     {
         $status = Status::all();
@@ -205,6 +230,7 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        //dd($request->all());
         $this->validate($request, [
             'SoftwareName' => 'required',
             'SoftwarePlatform' => 'required',
@@ -213,10 +239,14 @@ class ProjectController extends Controller
 
         $project = Project::where('SoftwareID', $project->SoftwareID)->first();
         $SoftwareID = $project->SoftwareID;
-        $project->SoftwareName = $request->SoftwareName;
-        $project->Description = $request->Description;
+        $project->SoftwareName = isset($request->SoftwareName) ? $request->SoftwareName : '';
+        $project->Description = isset($request->Description) ? $request->Description : '';
         $project->Unit = "D";
+        $project->NumberOfUser = isset($request->NumberOfUser) ? $request->NumberOfUser : '';
+        $project->ImplementationDate = date("Y-m-d", strtotime($request->ImplementationDate));
+        $project->ContactPerson = isset($request->ContactPerson) ? $request->ContactPerson : '';
         $project->StatusID = $request->StatusID;
+        $project->EntryBy = Auth::user()->UserID;
         if ($project->save() == true) {
             SoftwarePlatform::where('SoftwareID', $SoftwareID)->delete();
             for ($i = 0; $i < count($request->SoftwarePlatform); $i++) {
@@ -269,5 +299,13 @@ class ProjectController extends Controller
             );
         }
         return $data;
+    }
+
+    public function project_export()
+    {
+        //$temp = Excel::download(new ProjectsExport, 'project_export.xlsx');
+        //dd($temp);
+        return \Maatwebsite\Excel\Facades\Excel::download(new ProjectsExport, 'projects_export.xlsx');
+        //return $temp;
     }
 }

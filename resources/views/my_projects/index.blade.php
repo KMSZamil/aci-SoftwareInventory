@@ -7,14 +7,14 @@
 @endpush
 
 @section('page_title')
-    Projects
+    My Projects
 @endsection
 
 @section('content')
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Projects</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Project List</li>
+            <li class="breadcrumb-item">Projects</li>
+            <li class="breadcrumb-item active" aria-current="page">My Projects</li>
         </ol>
     </nav>
 
@@ -24,8 +24,8 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-10 text-left">
-                            <a href="{{ route('excel.project_export') }}">
-                                <button type="button" class="btn btn-primary mb-2 text-right">Projects Export</button>
+                            <a href="{{ route('excel.my_project_export') }}">
+                                <button type="button" class="btn btn-primary mb-2 text-right">My Projects Export</button>
                             </a>
                         </div>
                         <div class="col-2 text-right">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
 
-                    <h6 class="card-title">Project Data</h6>
+                    <h6 class="card-title">My Projects</h6>
                     <div class="table-responsive">
                         <table id="datatable" class="table table-bordered">
                             <thead>
@@ -79,7 +79,7 @@
             var table = $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('projects.index') }}",
+                ajax: "{{ route('my_project.index') }}",
                 columns: [
                     // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                     {
@@ -178,6 +178,23 @@
                     e.dismiss;
                 }
             })
+            // Swal.fire({
+            //     title: 'Are you sure?',
+            //     text: "You won't be able to revert this!",
+            //     icon: 'warning',
+            //     showCancelButton: true,
+            //     confirmButtonColor: '#3085d6',
+            //     cancelButtonColor: '#d33',
+            //     confirmButtonText: 'Yes, delete it!'
+            // }).then((result) => {
+            //     if (result.isConfirmed) {
+            //         Swal.fire(
+            //             'Deleted!',
+            //             'Your file has been deleted.',
+            //             'success'
+            //         )
+            //     }
+            // })
         }
     </script>
 @endpush

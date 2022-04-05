@@ -1,7 +1,38 @@
 @extends('layouts.master')
 
 @push('css')
-    <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendors/toastr/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendors/select2/select2.min.css') }}">
+    <style>
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #444;
+            line-height: 20px !important;
+            padding-left: 0px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow b {
+            border-color: #fff transparent transparent transparent !important;
+            border-style: solid;
+            margin-top: -8px !important;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 34px !important;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            color: #ffffff;
+            border: 0;
+            border-radius: 3px;
+            padding: 6px;
+            font-size: .625rem;
+            font-family: inherit;
+            line-height: 1;
+            background: #727cf5;
+        }
+
+    </style>
 @endpush
 
 @section('page_title')
@@ -12,7 +43,7 @@
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Project</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Project Show</li>
+            <li class="breadcrumb-item active" aria-current="page">Project Edit</li>
         </ol>
     </nav>
 
@@ -31,44 +62,131 @@
         <div class="col-md-12 stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h6 class="card-title">Project Form</h6>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label">Title 1</label>
-                                    <input type="text" class="form-control" name="title1" id="title1" placeholder="Enter Title1" value="{{ $project->title1 }}" readonly>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label">Title 2</label>
-                                    <input type="text" class="form-control" name="title2" id="title2" placeholder="Enter Title2" value="{{ $project->title2 }}" readonly>
-                                </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Software Name</label>
+                                <input type="text" class="form-control" name="SoftwareName" id="SoftwareName"
+                                    placeholder="Enter Software Name" value="{{ $project->SoftwareName }}" readonly>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label">Date</label>
-                                    <input type="text" class="form-control" name="date" id="datePickerEdit" value="{{ $project->date }}" readonly>
-                                </div>
+
+                        @php
+                            $data_array = [];
+                            if (!empty($user_platform)) {
+                                foreach ($user_platform as $row) {
+                                    $data_array[] = $row['PlatformID'];
+                                }
+                            }
+                        @endphp
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Software Platform</label>
+                                <select class="form-control select2" name="SoftwarePlatform[]" id="SoftwarePlatform"
+                                    multiple required disabled="disabled">
+                                    <option value="">Select a platform</option>
+                                    @foreach ($platform as $row)
+                                        <option value='{{ $row->PlatformID }}' @php
+                                            if (in_array($row->PlatformID, $data_array)) {
+                                                echo 'selected';
+                                            }
+                                        @endphp>
+                                            {{ $row->PlatformName }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6">
+                    </div>
+                    <div class="row">
+                        {{-- <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="control-label">Description</label>
-                                    <textarea class="form-control" name="description" rows="5" readonly>{{ $project->description }}</textarea>
+                                    <label class="control-label">Unit</label>
+                                    <input type="text" class="form-control" name="Unit" id="Unit"
+                                        placeholder="Enter Unit">
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label">Status</label>
-                                    <input type="text" class="form-control" name="is_active" value="{{ isset($project->is_active) && $project->is_active=='1' ? "Active" : "In-Active"}}" readonly>
-                                </div>
+                            </div> --}}
+
+                        @php
+                            $data_array = [];
+                            if (!empty($user_departments)) {
+                                foreach ($user_departments as $row) {
+                                    $data_array[] = $row['DepartmentCode'];
+                                }
+                            }
+                        @endphp
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Department</label>
+                                <select class="form-control select2" name="SoftwareDepartment[]" id="SoftwareDepartment"
+                                    multiple required disabled="disabled">
+                                    <option value="">Select a department</option>
+                                    @foreach ($departments as $row)
+                                        <option value='{{ $row->DepartmentCode }}' @php
+                                            if (in_array($row->DepartmentCode, $data_array)) {
+                                                echo 'selected';
+                                            }
+                                        @endphp>
+                                            {{ $row->DepartmentName }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                        <a href="{{ route('projects.index') }}"><button type="submit" class="btn btn-primary submit">Back</button></a>
+
+                        @php
+                            $data_array = [];
+                            if (!empty($user_developers)) {
+                                foreach ($user_developers as $row) {
+                                    $data_array[] = $row['DeveloperID'];
+                                }
+                            }
+                        @endphp
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Developer</label>
+                                <select class="form-control select2" name="SoftwareDeveloper[]" id="SoftwareDeveloper"
+                                    multiple required disabled="disabled">
+                                    <option value="">Select a developer</option>
+                                    @foreach ($developers as $row)
+                                        <option value='{{ $row->DeveloperID }}' @php
+                                            if (in_array($row->DeveloperID, $data_array)) {
+                                                echo 'selected';
+                                            }
+                                        @endphp>
+                                            {{ $row->DeveloperName }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Description</label>
+                                <textarea class="form-control" name="Description" rows="3"
+                                    disabled="disabled">{{ $project->Description }}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Status</label>
+                                <select class="form-control mb-3" name="StatusID" required disabled="disabled">
+                                    @foreach ($status as $row)
+                                        <option value='{{ $row->StatusID }}' @php
+                                            if (isset($project->StatusID) && $project->StatusID == $row->StatusID) {
+                                                echo 'selected';
+                                            }
+                                        @endphp>
+                                            {{ $row->StatusName }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="goBack()">Go Back</button>
+
                 </div>
             </div>
         </div>
@@ -77,4 +195,20 @@
 
 @push('js')
     <script src="{{ asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('js/datepicker_edit_custom.js') }}"></script>
+    <script src="{{ asset('assets/vendors/select2/select2.min.js') }}"></script>
+    <script>
+        $(function() {
+            $('.select2').select2({
+                closeOnSelect: false
+            });
+        });
+    </script>
+    <script src="{{ asset('assets/vendors/toastr/toastr.min.js') }}"></script>
+    {!! Toastr::message() !!}
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 @endpush

@@ -69,7 +69,7 @@
                                     <label for="Designation">Designation</label>
                                     <input type="text" placeholder="Designation"
                                            class="form-control @error('Designation') is-invalid @enderror" name="Designation"
-                                           value="{{ $usermanager->Designation }}" required>
+                                           value="{{ $usermanager->Designation }}">
                                     @error('Designation')
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -82,7 +82,7 @@
                                     <label for="Email">Email address</label>
                                     <input type="email" placeholder="Email"
                                            class="form-control @error('Email') is-invalid @enderror" name="Email"
-                                           value="{{ $usermanager->Email }}" required >
+                                           value="{{ $usermanager->Email }}">
                                     @error('Email')
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -111,7 +111,7 @@
                                     <label class="control-label">Status</label>
                                     <select class="form-control mb-3" name="Active" required>
                                         <option value="Y" {{ isset($usermanager->Active) && $usermanager->Active=='Y' ? "selected" : ""}}>Active</option>
-                                        <option value="N">In-Active</option>
+                                        <option value="N"{{ isset($usermanager->Active) && $usermanager->Active=='N' ? "selected" : ""}}>In-Active</option>
                                     </select>
                                 </div>
                             </div>

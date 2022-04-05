@@ -41,7 +41,7 @@
 @section('content')
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Project</a></li>
+            <li class="breadcrumb-item"><a href="#">Project</a></li>
             <li class="breadcrumb-item active" aria-current="page">Project Edit</li>
         </ol>
     </nav>
@@ -62,9 +62,9 @@
             <div class="card">
                 <div class="card-body">
                     <h6 class="card-title">Project Form</h6>
-                    <form action="{{ route('projects.update', $project->SoftwareID) }}" method="POST">
+                    <form action="{{ route('my_project.update', $project->SoftwareID) }}" method="POST">
                         @csrf
-                        @method('PUT')
+
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">

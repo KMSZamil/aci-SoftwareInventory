@@ -16,4 +16,9 @@ class SoftwarePlatform extends Model
     {
         return $this->belongsTo(Platform::class, 'PlatformID', 'PlatformID');
     }
+
+    public function projects()
+    {
+        return $this->belongsTo(Project::class, 'SoftwareID', 'SoftwareID');
+    }
 }

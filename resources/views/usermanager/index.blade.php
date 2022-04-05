@@ -2,7 +2,7 @@
 
 @push('css')
     <link rel="stylesheet" href="{{ asset('assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css') }}">
-    <link rel="stylesheet" href="{{asset('assets/vendors/toastr/toastr.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/vendors/toastr/toastr.min.css') }}">
 @endpush
 
 @section('page_title')
@@ -30,15 +30,15 @@
                     <div class="table-responsive">
                         <table id="datatable" class="table table-bordered">
                             <thead>
-                            <tr>
-                                <th>Sl</th>
-                                <th>UserID</th>
-                                <th>UserName</th>
-                                <th>Designation</th>
-                                <th>Email</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
+                                <tr>
+                                    <th>Sl</th>
+                                    <th>UserID</th>
+                                    <th>UserName</th>
+                                    <th>Designation</th>
+                                    {{-- <th>Email</th> --}}
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
                             </thead>
                             <tbody>
 
@@ -52,7 +52,7 @@
 @endsection
 
 @push('js')
-    <script src="{{asset('assets/vendors/toastr/toastr.min.js')}}"></script>
+    <script src="{{ asset('assets/vendors/toastr/toastr.min.js') }}"></script>
     {!! Toastr::message() !!}
     <script src="{{ asset('assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
@@ -64,15 +64,41 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('usermanager.index') }}",
-                columns: [
-                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                    {data: 'UserID', name: 'UserID'},
-                    {data: 'UserName', name: 'UserName'},
-                    {data: 'Email', name: 'Email'},
-                    {data: 'Designation', name: 'Designation'},
-                    {data: 'status', name: 'status'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false}
-                ]
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'UserID',
+                        name: 'UserID'
+                    },
+                    {
+                        data: 'UserName',
+                        name: 'UserName'
+                    },
+                    {
+                        data: 'Designation',
+                        name: 'Designation'
+                    },
+                    // {
+                    //     data: 'Email',
+                    //     name: 'Email'
+                    // },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                createdRow: function ( row, data, index ) {
+                    $('td', row).eq(4).addClass('text-center');
+                    $('td', row).eq(5).addClass('text-center');
+                }
             });
 
         });
@@ -87,24 +113,31 @@
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!'
-            }).then(function (e) {
+            }).then(function(e) {
                 if (e.value === true) {
                     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                     $.ajax({
                         type: 'DELETE',
-                        url: "{{ route('usermanager.destroy','_id') }}".replace('_id', id),
-                        data: {_token: CSRF_TOKEN, id: id},
+                        url: "{{ route('usermanager.destroy', '_id') }}".replace('_id', id),
+                        data: {
+                            _token: CSRF_TOKEN,
+                            id: id
+                        },
                         dataType: 'JSON',
-                        success: function (results) {
+                        success: function(results) {
                             //console.log(data); return false;
                             if (results.success === true) {
-                                swal.fire("Successfully deleted", results.message, "success").then(function() {
-                                    window.location = "{{ route('usermanager.index') }}";
-                                });
+                                swal.fire("Successfully deleted", results.message, "success").then(
+                                    function() {
+                                        window.location = "{{ route('usermanager.index') }}";
+                                    });
                             } else {
                                 swal.fire("Error!", results.message, "error");
                             }
-                        },error: function(e) { console.log(e); }
+                        },
+                        error: function(e) {
+                            console.log(e);
+                        }
                     });
                 } else {
                     e.dismiss;
@@ -113,4 +146,3 @@
         }
     </script>
 @endpush
-

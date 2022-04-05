@@ -37,22 +37,40 @@
                 </li>
             @endif
 
-            @if (auth()->user()->hasPermissionTo(2))
-                <li class="nav-item nav-category">Settings</li>
+            @if (auth()->user()->hasPermissionTo(5))
                 <li
-                    class="nav-item {{ request()->is('permissions') || request()->is('permissions/*') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('permissions.index') }}">
-                        <i class="link-icon" data-feather="settings"></i>
-                        <span class="link-title">Permissions</span>
+                    class="nav-item {{ request()->is('my_project') || request()->is('my_project/*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('my_project.index') }}">
+                        <i class="link-icon" data-feather="aperture"></i>
+                        <span class="link-title">My Projects</span>
                     </a>
                 </li>
+
+                {{-- <li class="nav-item {{ request()->is('create') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('projects.create') }}">
+                        <i class="link-icon" data-feather="plus-square"></i>
+                        <span class="link-title">Project Entry</span>
+                    </a>
+                </li> --}}
             @endif
+
+
             @if (auth()->user()->hasPermissionTo(3))
+                <li class="nav-item nav-category">Settings</li>
                 <li
                     class="nav-item {{ request()->is('usermanager') || request()->is('usermanager/*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('usermanager.index') }}">
                         <i class="link-icon" data-feather="settings"></i>
                         <span class="link-title">User Manager</span>
+                    </a>
+                </li>
+            @endif
+            @if (auth()->user()->hasPermissionTo(2))
+                <li
+                    class="nav-item {{ request()->is('permissions') || request()->is('permissions/*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('permissions.index') }}">
+                        <i class="link-icon" data-feather="settings"></i>
+                        <span class="link-title">Permissions</span>
                     </a>
                 </li>
             @endif

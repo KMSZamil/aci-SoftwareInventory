@@ -41,7 +41,7 @@
 @section('content')
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('projects.index') }}">Project</a></li>
+            <li class="breadcrumb-item"><a href="#">Project</a></li>
             <li class="breadcrumb-item active" aria-current="page">Project Create</li>
         </ol>
     </nav>
@@ -76,8 +76,8 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label">Software Platform</label>
-                                    <select class="form-control select2" name="SoftwarePlatform[]" id="SoftwarePlatform"
-                                        multiple required>
+                                    <select class="form-control select2Single" name="SoftwarePlatform[]"
+                                        id="SoftwarePlatform" required>
                                         <option value="">Select a platform</option>
                                         @foreach ($platform as $row)
                                             <option value='{{ $row->PlatformID }}'>{{ $row->PlatformName }}</option>
@@ -120,11 +120,31 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="control-label">Description</label>
-                                    <textarea class="form-control" name="Description" rows="3"></textarea>
+                                    <label class="control-label">Number of User</label>
+                                    <input type="text" class="form-control numeric" name="NumberOfUser" id="NumberOfUser"
+                                        placeholder="Enter Number Of User" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Implementation Date</label>
+                                    <input type="date" class="form-control" name="ImplementationDate"
+                                        {{-- id="datePickerExample"  --}}
+                                        placeholder="Enter Implementation Date" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Contact Person</label>
+                                    <input type="text" class="form-control" name="ContactPerson" id="ContactPerson"
+                                        placeholder="Enter Contact Person" />
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -137,6 +157,16 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Description</label>
+                                    <textarea class="form-control" name="Description" rows="3"></textarea>
+                                </div>
+                            </div>
+
                         </div>
                         <button type="submit" class="btn btn-primary submit">Submit Software</button>
                     </form>
@@ -152,7 +182,13 @@
     <script src="{{ asset('assets/vendors/select2/select2.min.js') }}"></script>
     <script>
         $(function() {
-            $('.select2').select2();
+            $('.select2').select2({
+                closeOnSelect: false
+            });
+        });
+
+        $(function() {
+            $('.select2Single').select2();
         });
     </script>
 @endpush

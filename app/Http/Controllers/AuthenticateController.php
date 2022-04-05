@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 
 class AuthenticateController extends Controller
@@ -90,7 +91,10 @@ class AuthenticateController extends Controller
     public function dashboard()
     {
         if (Auth::check()) {
-            return view('home');
+            $developer_wise_count = \DB::select("exec sp_DeveloperWiseCount");
+            $department_wise_count = \DB::select("exec sp_DepartmentWiseCount");
+            //dd($developer_wise_count);
+            return view('home', compact('developer_wise_count','department_wise_count'));
         }
         return redirect()->route('authenticate.login');
     }

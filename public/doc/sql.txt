@@ -1,0 +1,14 @@
+
+select * from Status
+
+select * from Software Where EntryBy='123456'
+
+SELECT * FROM SoftwareDeveloper Where SoftwareID IN ('S00057','S00065')
+-- DELETE SoftwareDeveloper Where SoftwareID IN ('S00111','S00111')
+-- DELETE SoftwareDepartment Where SoftwareID IN ('S00111','S00111')
+-- DELETE Software Where EntryBy='123456'
+
+SELECT * from Developers
+
+--INSERT INTO Developers
+--select UserID as DeveloperID, UserName as DeveloperName,540,300,240,'Sofyware' as Unit FROM UserManager Where UserID NOT IN (Select DeveloperID FROM Developers) AND UserID NOT IN ('123456','18510')
