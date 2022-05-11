@@ -35,6 +35,14 @@
                         <span class="link-title">Projects</span>
                     </a>
                 </li>
+
+                <li
+                    class="nav-item {{ request()->is('developers_profile') || request()->is('developers_profile/*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('developers_profile.index') }}">
+                        <i class="link-icon" data-feather="bookmark"></i>
+                        <span class="link-title">Developers Profile</span>
+                    </a>
+                </li>
             @endif
 
             @if (auth()->user()->hasPermissionTo(5))

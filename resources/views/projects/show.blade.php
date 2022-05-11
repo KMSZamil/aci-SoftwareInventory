@@ -163,9 +163,29 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label">Description</label>
-                                <textarea class="form-control" name="Description" rows="3"
-                                    disabled="disabled">{{ $project->Description }}</textarea>
+                                <label class="control-label">Number of User</label>
+                                <input type="text" class="form-control numeric" name="NumberOfUser" id="NumberOfUser"
+                                    placeholder="Enter Number Of User" value="{{ $project->NumberOfUser }}" readonly />
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Implementation Date</label>
+                                <input type="date" class="form-control" name="ImplementationDate" {{-- id="datePickerEdit" --}}
+                                    placeholder="Enter Implementation Date" {{-- value="{{ date('Y-m-d', strtotime($project->ImplementationDate)) }}" --}}
+                                    value="<?php echo $project->ImplementationDate != '1970-01-01 00:00:00.000' ? date('Y-m-d', strtotime($project->ImplementationDate)) : ''; ?>" readonly />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Contact Person</label>
+                                <input type="text" class="form-control" name="ContactPerson" id="ContactPerson"
+                                    placeholder="Enter Contact Person" value="{{ $project->ContactPerson }}" readonly />
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -183,6 +203,40 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Description</label>
+                                <textarea class="form-control" name="Description" rows="3"
+                                    disabled="disabled">{{ $project->Description }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Time Frame</label>
+                                <select class="form-control mb-3" name="TimeFrameID" required disabled="disabled">
+                                    <option value=''>Select</option>
+                                    @foreach ($time_frame as $row)
+                                        <option value='{{ $row->TimeFrameID }}' @php
+                                            if (isset($project->TimeFrameID) && $project->TimeFrameID == $row->TimeFrameID) {
+                                                echo 'selected';
+                                            }
+                                        @endphp>
+                                            {{ $row->TimeFrameName }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Value</label>
+                                <input type="text" class="form-control" name="Value" id="Value" placeholder="Enter Value"
+                                    value="{{ $project->Value }}" readonly />
+                            </div>
+                        </div>
+
                     </div>
 
                     <button class="btn btn-primary" onclick="goBack()">Go Back</button>

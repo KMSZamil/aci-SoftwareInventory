@@ -164,7 +164,7 @@ class MyProjectController extends Controller
         $project->Description = isset($request->Description) ? $request->Description : '';
         $project->Unit = "D";
         $project->NumberOfUser = isset($request->NumberOfUser) ? $request->NumberOfUser : '';
-        $project->ImplementationDate = date("Y-m-d", strtotime($request->ImplementationDate));
+        $project->ImplementationDate = isset($request->ImplementationDate) ? date("Y-m-d", strtotime($request->ImplementationDate)) : null;
         $project->ContactPerson = isset($request->ContactPerson) ? $request->ContactPerson : '';
         $project->StatusID = $request->StatusID;
         $project->EntryBy = Auth::user()->UserID;
@@ -196,7 +196,7 @@ class MyProjectController extends Controller
         } else {
             Toastr::error('Data not updated', 'Opps!', ["positionClass" => "toast-top-right"]);
         }
-        return redirect()->route('my_projects.index');
+        return redirect()->route('my_project.index');
     }
 
     public function destroy(Project $project)

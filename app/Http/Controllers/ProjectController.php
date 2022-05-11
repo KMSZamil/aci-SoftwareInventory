@@ -11,6 +11,7 @@ use App\Models\SoftwareDepartment;
 use App\Models\SoftwareDeveloper;
 use App\Models\SoftwarePlatform;
 use App\Models\Status;
+use App\Models\TimeFrame;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,7 +87,7 @@ class ProjectController extends Controller
                     return $sub;
                 })
                 ->addColumn('ImplementationDate', function ($row) {
-                    return isset($row->ImplementationDate) ? date("Y-m-d", strtotime($row->ImplementationDate)) : '';
+                    return $row->ImplementationDate != '1970-01-01 00:00:00.000' ? date("Y-m-d", strtotime($row->ImplementationDate)) : '';
                 })
                 ->addColumn('action', function ($row) {
                     $buttons = '';
@@ -112,8 +113,9 @@ class ProjectController extends Controller
         $platform = Platform::all();
         $developers = Developer::all();
         $departments = Department::all();
+        $time_frame = TimeFrame::where('Active', 'Y')->get();
         //dd($departments);
-        return view('projects.create', compact('status', 'platform', 'developers', 'departments'));
+        return view('projects.create', compact('status', 'platform', 'developers', 'departments', 'time_frame'));
     }
 
     /**
@@ -150,9 +152,11 @@ class ProjectController extends Controller
         $project->Description = isset($request->Description) ? $request->Description : '';
         $project->Unit = "D";
         $project->NumberOfUser = isset($request->NumberOfUser) ? $request->NumberOfUser : '';
-        $project->ImplementationDate = date("Y-m-d", strtotime($request->ImplementationDate));
+        $project->ImplementationDate = isset($request->ImplementationDate) ? date("Y-m-d", strtotime($request->ImplementationDate)) : null;
         $project->ContactPerson = isset($request->ContactPerson) ? $request->ContactPerson : '';
         $project->StatusID = $request->StatusID;
+        $project->Value = $request->Value;
+        $project->TimeFrameID = $request->TimeFrameID;
         $project->EntryBy = Auth::user()->UserID;
         if ($project->save() == true) {
             for ($i = 0; $i < count($request->SoftwarePlatform); $i++) {
@@ -200,11 +204,14 @@ class ProjectController extends Controller
         $platform = Platform::all();
         $developers = Developer::all();
         $departments = Department::all();
+        $time_frame = TimeFrame::where('Active', 'Y')->get();
 
         $user_platform = SoftwarePlatform::where('SoftwareID', $project->SoftwareID)->get();
         $user_developers = SoftwareDeveloper::where('SoftwareID', $project->SoftwareID)->get();
         $user_departments = SoftwareDepartment::where('SoftwareID', $project->SoftwareID)->get();
-        return view('projects.show', compact('project', 'status', 'platform', 'developers', 'departments', 'user_platform', 'user_developers', 'user_departments'));
+
+
+        return view('projects.show', compact('project', 'status', 'platform', 'developers', 'departments', 'time_frame', 'user_platform', 'user_developers', 'user_departments'));
     }
 
     public function edit(Project $project)
@@ -213,12 +220,13 @@ class ProjectController extends Controller
         $platform = Platform::all();
         $developers = Developer::all();
         $departments = Department::all();
+        $time_frame = TimeFrame::where('Active', 'Y')->get();
 
         $user_platform = SoftwarePlatform::where('SoftwareID', $project->SoftwareID)->get();
         $user_developers = SoftwareDeveloper::where('SoftwareID', $project->SoftwareID)->get();
         $user_departments = SoftwareDepartment::where('SoftwareID', $project->SoftwareID)->get();
 
-        return view('projects.edit', compact('project', 'status', 'platform', 'developers', 'departments', 'user_platform', 'user_developers', 'user_departments'));
+        return view('projects.edit', compact('project', 'status', 'platform', 'developers', 'departments', 'time_frame', 'user_platform', 'user_developers', 'user_departments'));
     }
 
     /**
@@ -243,9 +251,11 @@ class ProjectController extends Controller
         $project->Description = isset($request->Description) ? $request->Description : '';
         $project->Unit = "D";
         $project->NumberOfUser = isset($request->NumberOfUser) ? $request->NumberOfUser : '';
-        $project->ImplementationDate = date("Y-m-d", strtotime($request->ImplementationDate));
+        $project->ImplementationDate = isset($request->ImplementationDate) ? date("Y-m-d", strtotime($request->ImplementationDate)) : null;
         $project->ContactPerson = isset($request->ContactPerson) ? $request->ContactPerson : '';
         $project->StatusID = $request->StatusID;
+        $project->Value = $request->Value;
+        $project->TimeFrameID = $request->TimeFrameID;
         $project->EntryBy = Auth::user()->UserID;
         if ($project->save() == true) {
             SoftwarePlatform::where('SoftwareID', $SoftwareID)->delete();

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticateController;
+use App\Http\Controllers\DevelopersProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SampleController;
@@ -47,6 +48,8 @@ Route::group(['middleware' => 'prevent-back-history'], function () {
     Route::post('/destroy/{id}', [MyProjectController::class, 'destroy'])->name('my_project.destroy');
     Route::get('/platform_wise/{id}', [MyProjectController::class, 'platform_wise'])->name('my_project.platform_wise');
 
+    Route::get('/developers_profile', [DevelopersProfileController::class, 'index'])->name('developers_profile.index');
+    Route::get('/developers_details/{id}', [DevelopersProfileController::class, 'developers_details'])->name('developers_details');
 });
 
 Route::get('/project_export', [ProjectController::class, 'project_export'])->name('excel.project_export');

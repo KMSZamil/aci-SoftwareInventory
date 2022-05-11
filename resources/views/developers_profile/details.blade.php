@@ -7,14 +7,15 @@
 @endpush
 
 @section('page_title')
-    Projects
+    Developers Profile
 @endsection
 
 @section('content')
     <nav class="page-breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Projects</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Project List</li>
+            <li class="breadcrumb-item">Projects</li>
+            <li class="breadcrumb-item active" aria-current="page">Developers Profile</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $user_data->UserName }}</li>
         </ol>
     </nav>
 
@@ -24,32 +25,27 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-10 text-left">
-                            <a href="{{ route('excel.project_export') }}">
+                            <a href="{{ route('excel.my_project_export') }}">
                                 <button type="button" class="btn btn-primary mb-2 text-right">Projects Export</button>
-                            </a>
-                        </div>
-                        <div class="col-2 text-right">
-                            <a href="{{ route('projects.create') }}">
-                                <button type="button" class="btn btn-primary mb-2 text-right">Create Project</button>
                             </a>
                         </div>
                     </div>
 
-                    <h6 class="card-title">Project Data</h6>
+                    <h6 class="card-title">Projects</h6>
                     <div class="table-responsive">
                         <table id="datatable" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Software Name</th>
+                                    <th>Description</th>
                                     <th>Status</th>
                                     <th>Platform</th>
+                                    <th>Developer</th>
                                     <th>Department</th>
                                     <th>Number of User</th>
                                     <th>Implementation Date</th>
                                     <th>Contact Person</th>
                                     <th>Action</th>
-                                    <th>Developer</th>
-                                    <th>Description</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,12 +75,16 @@
             var table = $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('projects.index') }}",
+                ajax: "{{ route('developers_profile') }}",
                 columns: [
                     // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                     {
                         data: 'SoftwareName',
                         name: 'SoftwareName'
+                    },
+                    {
+                        data: 'Description',
+                        name: 'Description'
                     },
                     {
                         data: 'Status',
@@ -94,6 +94,10 @@
                     {
                         data: 'platform_name',
                         name: 'platform_name'
+                    },
+                    {
+                        data: 'developer_name',
+                        name: 'developer_name'
                     },
                     {
                         data: 'department_name',
@@ -116,18 +120,10 @@
                         name: 'action',
                         orderable: false,
                         searchable: false
-                    },
-                    {
-                        data: 'developer_name',
-                        name: 'developer_name'
-                    },
-                    {
-                        data: 'Description',
-                        name: 'Description'
-                    },
+                    }
                 ],
                 createdRow: function(row, data, index) {
-                    $('td', row).eq(4).addClass('text-right');
+                    $('td', row).eq(6).addClass('text-right');
 
                 },
                 // dom: 'Bfrtip',
@@ -137,47 +133,5 @@
             });
 
         });
-    </script>
-    <script>
-        function deleteConfirmation(id) {
-            swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then(function(e) {
-                if (e.value === true) {
-                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                    $.ajax({
-                        type: 'DELETE',
-                        url: "{{ route('projects.destroy', '_id') }}".replace('_id', id),
-                        data: {
-                            _token: CSRF_TOKEN,
-                            id: id
-                        },
-                        dataType: 'JSON',
-                        success: function(results) {
-                            //console.log(data); return false;
-                            if (results.success === true) {
-                                swal.fire("Successfully deleted", results.message, "success").then(
-                                    function() {
-                                        window.location = "{{ route('projects.index') }}";
-                                    });
-                            } else {
-                                swal.fire("Error!", results.message, "error");
-                            }
-                        },
-                        error: function(e) {
-                            console.log(e);
-                        }
-                    });
-                } else {
-                    e.dismiss;
-                }
-            })
-        }
     </script>
 @endpush

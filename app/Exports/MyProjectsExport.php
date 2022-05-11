@@ -16,8 +16,7 @@ class MyProjectsExport implements FromCollection, WithHeadings
     {
         $UserID = Auth::user()->UserID;
         try {
-            $result = DB::select("SELECT SoftwareID,SoftwareName,Description,NumberOfUser,NumberOfUser,ImplementationDate,ContactPerson,EntryBy
-            FROM Software Where EntryBy = '$UserID'");
+            $result = DB::select("EXEC usp_doLoadSoftwareList '$UserID'");
             //dd($result);
         } catch (\Exception $e) {
             dd("Error");
@@ -30,11 +29,15 @@ class MyProjectsExport implements FromCollection, WithHeadings
         return [
             'SoftwareID',
             'SoftwareName',
+            'Platform',
             'Description',
             'NumberOfUser',
-            'ImplementationDate',
             'ContactPerson',
-            'EntryBy'
+            'ImplementationDate',
+            'Status',
+            'EntryBy',
+            'Department',
+            'Developers'
         ];
     }
 }

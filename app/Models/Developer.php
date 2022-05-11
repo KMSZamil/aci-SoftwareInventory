@@ -14,4 +14,9 @@ class Developer extends Model
     protected $keyType = 'string';
     public $incrementing = false;
     public $timestamps = true;
+
+    public function user_info()
+    {
+        return $this->belongsTo(UserManager::class, 'DeveloperID', 'UserID');
+    }
 }

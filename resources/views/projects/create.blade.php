@@ -133,8 +133,7 @@
                                 <div class="form-group">
                                     <label class="control-label">Implementation Date</label>
                                     <input type="date" class="form-control" name="ImplementationDate"
-                                        {{-- id="datePickerExample"  --}}
-                                        placeholder="Enter Implementation Date" />
+                                        {{-- id="datePickerExample" --}} placeholder="Enter Implementation Date" />
                                 </div>
                             </div>
                         </div>
@@ -164,6 +163,24 @@
                                 <div class="form-group">
                                     <label class="control-label">Description</label>
                                     <textarea class="form-control" name="Description" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Time Frame</label>
+                                    <select class="form-control mb-3" name="TimeFrameID" >
+                                        <option value=''>Select</option>
+                                        @foreach ($time_frame as $row)
+                                            <option value='{{ $row->TimeFrameID }}'>{{ $row->TimeFrameName }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Value</label>
+                                    <input type="text" class="form-control" name="Value" id="Value"
+                                        placeholder="Enter Value" />
                                 </div>
                             </div>
 
