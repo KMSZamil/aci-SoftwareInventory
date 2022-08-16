@@ -30,7 +30,6 @@
             line-height: 1;
             background: #727cf5;
         }
-
     </style>
 @endpush
 
@@ -179,7 +178,7 @@
                                     <label class="control-label">Implementation Date</label>
                                     <input type="date" class="form-control" name="ImplementationDate"
                                         {{-- id="datePickerEdit" --}} placeholder="Enter Implementation Date" {{-- value="{{ date('Y-m-d', strtotime($project->ImplementationDate)) }}" --}}
-                                        value="<?php echo $project->ImplementationDate != '1970-01-01 00:00:00.000' ? date('Y-m-d', strtotime($project->ImplementationDate)) : ''; ?>" />
+                                        value="<?php echo $project->ImplementationDate != '1970-01-01 00:00:00.000' && $project->ImplementationDate != null ? date('Y-m-d', strtotime($project->ImplementationDate)) : ''; ?>" />
                                 </div>
                             </div>
                         </div>
@@ -213,34 +212,36 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label">Description</label>
-                                    <textarea class="form-control" name="Description" rows="3">{{ $project->Description }}</textarea>
+                                    <textarea class="form-control" name="Description" rows="6">{{ $project->Description }}</textarea>
                                 </div>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label">Time Frame</label>
-                                    <select class="form-control mb-3" name="TimeFrameID" >
+                                    <select class="form-control mb-3" name="TimeFrameID">
                                         <option value=''>Select</option>
                                         @foreach ($time_frame as $row)
-                                            <option value='{{ $row->TimeFrameID }}'
-                                                @php
+                                            <option value='{{ $row->TimeFrameID }}' @php
                                                 if (isset($project->TimeFrameID) && $project->TimeFrameID == $row->TimeFrameID) {
                                                     echo 'selected';
                                                 }
-                                            @endphp
-                                                >{{ $row->TimeFrameName }}</option>
+                                            @endphp>
+                                                {{ $row->TimeFrameName }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label">Value</label>
                                     <input type="text" class="form-control" name="Value" id="Value"
                                         placeholder="Enter Value" value="{{ $project->Value }}" />
                                 </div>
                             </div>
-
                         </div>
                         <button type="submit" class="btn btn-primary submit">Update Software</button>
                     </form>

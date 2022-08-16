@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\MyProjectsExport;
-use Illuminate\Http\Request;
-use App\Models\Department;
-use App\Models\Developer;
-use App\Models\Platform;
-use App\Models\Project;
-use App\Models\SoftwareDepartment;
-use App\Models\SoftwareDeveloper;
-use App\Models\SoftwarePlatform;
 use App\Models\Status;
+use App\Models\Project;
+use App\Models\Platform;
+use App\Models\Developer;
+use App\Models\TimeFrame;
+use App\Models\Department;
+use Illuminate\Http\Request;
+use App\Models\SoftwarePlatform;
+use App\Exports\MyProjectsExport;
+use App\Models\SoftwareDeveloper;
+use App\Models\SoftwareDepartment;
+use Illuminate\Support\Facades\DB;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class MyProjectController extends Controller
@@ -34,9 +35,9 @@ class MyProjectController extends Controller
                 ->addColumn('Status', function ($row) {
                     if ($row->projects->StatusID == 4) {
                         return '<span  class="badge badge-pill badge-success">Complete</span>';
-                    } elseif ($row->StatusID == 3) {
+                    } elseif ($row->projects->StatusID == 3) {
                         return '<span  class="badge badge-pill badge-warning">Pipeline</span>';
-                    } elseif ($row->StatusID == 2) {
+                    } elseif ($row->projects->StatusID == 2) {
                         return '<span  class="badge badge-pill badge-primary">In Progress</span>';
                     } else {
                         return '<span  class="badge badge-pill badge-secondary">New</span>';
@@ -88,7 +89,7 @@ class MyProjectController extends Controller
                     return isset($row->projects->SoftwareName) ? $row->projects->SoftwareName : '';
                 })
                 ->addColumn('Description', function ($row) {
-                    return isset($row->projects->Description) ? $row->projects->Description : '';
+                    return isset($row->projects->Description) ? \Str::limit($row->projects->Description, 50, '...') : '';
                 })
                 ->addColumn('NumberOfUser', function ($row) {
                     return isset($row->projects->NumberOfUser) ? $row->projects->NumberOfUser : '';
@@ -140,12 +141,13 @@ class MyProjectController extends Controller
         $platform = Platform::all();
         $developers = Developer::all();
         $departments = Department::all();
+        $time_frame = TimeFrame::where('Active', 'Y')->get();
 
         $user_platform = SoftwarePlatform::where('SoftwareID', $project->SoftwareID)->get();
         $user_developers = SoftwareDeveloper::where('SoftwareID', $project->SoftwareID)->get();
         $user_departments = SoftwareDepartment::where('SoftwareID', $project->SoftwareID)->get();
 
-        return view('my_projects.edit', compact('project', 'status', 'platform', 'developers', 'departments', 'user_platform', 'user_developers', 'user_departments'));
+        return view('my_projects.edit', compact('project', 'status', 'platform', 'developers', 'departments', 'time_frame', 'user_platform', 'user_developers', 'user_departments'));
     }
 
     public function update(Request $request, $id)
@@ -167,6 +169,8 @@ class MyProjectController extends Controller
         $project->ImplementationDate = isset($request->ImplementationDate) ? date("Y-m-d", strtotime($request->ImplementationDate)) : null;
         $project->ContactPerson = isset($request->ContactPerson) ? $request->ContactPerson : '';
         $project->StatusID = $request->StatusID;
+        $project->Value = isset($request->Value) ? $request->Value : 0;
+        $project->TimeFrameID = isset($request->TimeFrameID) ? $request->TimeFrameID : 0;
         $project->EntryBy = Auth::user()->UserID;
         if ($project->save() == true) {
             SoftwarePlatform::where('SoftwareID', $SoftwareID)->delete();

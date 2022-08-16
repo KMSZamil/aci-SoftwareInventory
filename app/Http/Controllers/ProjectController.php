@@ -89,6 +89,9 @@ class ProjectController extends Controller
                 ->addColumn('ImplementationDate', function ($row) {
                     return $row->ImplementationDate != '1970-01-01 00:00:00.000' ? date("Y-m-d", strtotime($row->ImplementationDate)) : '';
                 })
+                ->addColumn('Description', function ($row) {
+                    return isset($row->Description) ? \Str::limit($row->Description, 50, '...') : '';
+                })
                 ->addColumn('action', function ($row) {
                     $buttons = '';
                     $buttons .= '<a href="' . route('projects.show', $row->SoftwareID) . '"> <button class="btn btn-warning btn-xs">Show</button> </a>';

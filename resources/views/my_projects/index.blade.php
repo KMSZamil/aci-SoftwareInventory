@@ -79,6 +79,7 @@
             var table = $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
+                stateSave: true,
                 ajax: "{{ route('my_project.index') }}",
                 columns: [
                     // {data: 'DT_RowIndex', name: 'DT_RowIndex'},

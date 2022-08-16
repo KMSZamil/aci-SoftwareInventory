@@ -30,7 +30,6 @@
             line-height: 1;
             background: #727cf5;
         }
-
     </style>
 @endpush
 
@@ -169,22 +168,25 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label">Time Frame</label>
-                                    <select class="form-control mb-3" name="TimeFrameID" >
+                                    <select class="form-control mb-3" name="TimeFrameID">
                                         <option value=''>Select</option>
                                         @foreach ($time_frame as $row)
                                             <option value='{{ $row->TimeFrameID }}'>{{ $row->TimeFrameName }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label">Value</label>
                                     <input type="text" class="form-control" name="Value" id="Value"
-                                        placeholder="Enter Value" />
+                                        placeholder="Enter Value" value="" />
                                 </div>
                             </div>
-
                         </div>
+
                         <button type="submit" class="btn btn-primary submit">Submit Software</button>
                     </form>
                 </div>
