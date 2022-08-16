@@ -94,7 +94,7 @@ class AuthenticateController extends Controller
             $developer_wise_count = \DB::select("exec sp_DeveloperWiseCount");
             $department_wise_count = \DB::select("exec sp_DepartmentWiseCount");
             //dd($developer_wise_count);
-            return view('home', compact('developer_wise_count','department_wise_count'));
+            return view('home', compact('developer_wise_count', 'department_wise_count'));
         }
         return redirect()->route('authenticate.login');
     }
@@ -120,8 +120,10 @@ class AuthenticateController extends Controller
             'new_password' => ['required'],
             'new_confirm_password' => ['same:new_password'],
         ]);
+        //dd(auth()->user()->UserID);
+        //dd($request->all());
 
-        User::find(auth()->user()->id)->update(['Password' => Hash::make($request->new_password)]);
+        User::find(auth()->user()->UserID)->update(['Password' => Hash::make($request->new_password)]);
 
         Toastr::success('Password Change Successfully', 'GoodJob!', ["positionClass" => "toast-top-right"]);
         return redirect()->route('dashboard');

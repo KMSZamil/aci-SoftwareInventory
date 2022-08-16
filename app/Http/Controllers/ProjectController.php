@@ -34,7 +34,7 @@ class ProjectController extends Controller
         //$data = Project::with('platforms.platform_name', 'departments.department_name', 'developers.developer_name')->get();
         //dd($data);
         if ($request->ajax()) {
-            $data = Project::query()->with('platforms.platform_name', 'departments.department_name', 'developers.developer_name');
+            $data = Project::with('platforms.platform_name', 'departments.department_name', 'developers.developer_name')->get();
             return Datatables::of($data)
                 ->addColumn('Status', function ($row) {
                     if ($row->StatusID == 4) {
@@ -96,7 +96,7 @@ class ProjectController extends Controller
                     //$buttons .= '<button class="btn btn-danger btn-xs" onclick="deleteConfirmation(' . $row->SoftwareID . ')">Delete</button>';
                     return $buttons;
                 })
-                ->rawColumns(['action', 'Status', 'platform_name', 'developer_name', 'department_name'])
+                ->rawColumns(['action', 'Status'])
                 ->make(true);
         }
         return view('projects.index');
@@ -140,6 +140,7 @@ class ProjectController extends Controller
         if ($duplicate == null) {
             $project = new Project();
             $SoftwareID = get_software_id();
+            //dd($SoftwareID);
             $project->SoftwareID = $SoftwareID;
         } else {
             $project =  Project::where('SoftwareID', $duplicate->SoftwareID)->first();
@@ -154,10 +155,11 @@ class ProjectController extends Controller
         $project->NumberOfUser = isset($request->NumberOfUser) ? $request->NumberOfUser : '';
         $project->ImplementationDate = isset($request->ImplementationDate) ? date("Y-m-d", strtotime($request->ImplementationDate)) : null;
         $project->ContactPerson = isset($request->ContactPerson) ? $request->ContactPerson : '';
-        $project->StatusID = $request->StatusID;
-        $project->Value = $request->Value;
-        $project->TimeFrameID = $request->TimeFrameID;
+        $project->StatusID = isset($request->StatusID) ? $request->StatusID : '';
+        $project->Value = isset($request->Value) ? $request->Value : 0;
+        $project->TimeFrameID = isset($request->TimeFrameID) ? $request->TimeFrameID : 0;
         $project->EntryBy = Auth::user()->UserID;
+        //dd($project->save());
         if ($project->save() == true) {
             for ($i = 0; $i < count($request->SoftwarePlatform); $i++) {
                 $software_platform = new SoftwarePlatform();
@@ -165,6 +167,7 @@ class ProjectController extends Controller
                 $software_platform->PlatformID = $request->SoftwarePlatform[$i];
                 $software_platform->save();
             }
+
             for ($i = 0; $i < count($request->SoftwareDepartment); $i++) {
                 $software_department = new SoftwareDepartment();
                 $software_department->SoftwareID = $SoftwareID;
@@ -185,6 +188,7 @@ class ProjectController extends Controller
         } else {
             Toastr::error('Data not inserted', 'Opps!', ["positionClass" => "toast-top-right"]);
         }
+
         if (Auth::user()->UserID == '123456') {
             return redirect()->route('projects.index');
         } else {
@@ -253,9 +257,9 @@ class ProjectController extends Controller
         $project->NumberOfUser = isset($request->NumberOfUser) ? $request->NumberOfUser : '';
         $project->ImplementationDate = isset($request->ImplementationDate) ? date("Y-m-d", strtotime($request->ImplementationDate)) : null;
         $project->ContactPerson = isset($request->ContactPerson) ? $request->ContactPerson : '';
-        $project->StatusID = $request->StatusID;
-        $project->Value = $request->Value;
-        $project->TimeFrameID = $request->TimeFrameID;
+        $project->StatusID = isset($request->StatusID) ? $request->StatusID : '';
+        $project->Value = isset($request->Value) ? $request->Value : 0;
+        $project->TimeFrameID = isset($request->TimeFrameID) ? $request->TimeFrameID : 0;
         $project->EntryBy = Auth::user()->UserID;
         if ($project->save() == true) {
             SoftwarePlatform::where('SoftwareID', $SoftwareID)->delete();

@@ -27,18 +27,27 @@
                         <div class="card">
                             {{-- <a href="{{ route('developers_details', $developer->UserID) }}" style="color: inherit;"> --}}
                             <div class="card-body">
-                                <div class=" image d-flex flex-column justify-content-center align-items-center">
+                                <div class=" image d-flex flex-column justify-content-center align-items-left">
                                     <button class="btn btn-secondary">
-                                        <img style="border-radius: 10%"
-                                            src="data:image/png;base64,{{ base64_encode($developer->Photo) }}"
-                                            height="100" width="100" />
+                                        @if (isset($developer->Photo))
+                                            <img style="border-radius: 10%"
+                                                src="data:image/png;base64,{{ base64_encode($developer->Photo) }}"
+                                                height="100" width="100" />
+                                        @else
+                                            <img style="border-radius: 10%"
+                                                src="{{ asset('assets/images/no_img.jpg') }}"
+                                                height="100" width="100" />
+                                        @endif
                                     </button>
-                                    <span class="name mt-3">Staff ID: {{ $developer->UserID }}</span>
-                                    <span class="name mt-3">Name: {{ $developer->UserName }}</span>
+                                    <span class="name mt-3 justify-content-center text-center">Staff ID:
+                                        {{ $developer->UserID }}</span>
+                                    <span class="name mt-3 justify-content-center text-center">Name:
+                                        {{ $developer->UserName }}</span>
                                     <div class="d-flex flex-row justify-content-center align-items-center gap-2"> <span
-                                            class="idd1">Designation: {{ $developer->Designation }}</span>
+                                            class="idd1">Designation:
+                                            {{ isset($developer->Designation) ? $developer->Designation : '&nbsp;' }}</span>
                                     </div>
-                                    <div class="d-flex flex-row justify-content-center align-items-center"> <span
+                                    <div class="d-flex flex-row justify-content-center align-items-left"> <span
                                             class="number">Total Project:
                                             {{ $developer->TotalCount }}</span>&nbsp;<span class="number">New:
                                             {{ $developer->TotalNewCount }}</span>
