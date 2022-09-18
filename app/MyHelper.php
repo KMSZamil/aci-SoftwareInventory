@@ -1,13 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use App\Models\Project;
+use App\Models\Department;
 use App\Models\SoftwarePlatform;
+use Illuminate\Support\Facades\DB;
 
 if (!function_exists('get_period')) {
     function get_period()
     {
         return date('M y');
+    }
+}
+
+if (!function_exists('all_department')) {
+    function all_department()
+    {
+        return Department::all();
     }
 }
 

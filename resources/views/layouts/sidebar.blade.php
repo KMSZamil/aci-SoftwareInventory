@@ -61,7 +61,18 @@
                     </a>
                 </li> --}}
             @endif
-
+           
+            <!-- Report -->
+            <li class="nav-item nav-category">Report</li>
+            @if (auth()->user()->hasPermissionTo(4))
+                <li class="nav-item {{ request()->is('department_wise_report') || request()->is('department_wise_report/*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('department_wise_report') }}">
+                        <i class="link-icon" data-feather="slack"></i>
+                        <span class="link-title">Department Wise Report</span>
+                    </a>
+                </li>
+            @endif  
+            <!-- Report End-->
 
             @if (auth()->user()->hasPermissionTo(3))
                 <li class="nav-item nav-category">Settings</li>
