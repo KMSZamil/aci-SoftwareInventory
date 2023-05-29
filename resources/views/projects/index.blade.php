@@ -34,6 +34,27 @@
                             </a>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-5 col-sm-5 col-xs-5">
+                            <div class="form-group row">
+                                <label class="control-label col-sm-3">Date From</label>
+                                <input type="date" name="FromDate" id="FromDate" class="form-control"
+                                    value="{{ date('Y-m-01') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-5 col-xs-5">
+                            <div class="form-group row">
+                                <label class="control-label col-sm-3">Date To</label>
+                                <input type="date" name="ToDate" id="ToDate" class="form-control"
+                                    value="{{ date('Y-m-d') }}">
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-sm-2 col-xs-2 pt-5">
+                            <input type="submit" class="button-create filter btn btn-primary" value="Filter">
+                        </div>
+
+                    </div>
+
 
                     <h6 class="card-title">Project Data</h6>
                     <div class="table-responsive">
@@ -47,9 +68,14 @@
                                     <th>Number of User</th>
                                     <th>Implementation Date</th>
                                     <th>Contact Person</th>
-                                    <th>Action</th>
                                     <th>Developer</th>
                                     <th>Description</th>
+                                    <th>Delivery Date</th>
+                                    <th>Area Of Concern</th>
+                                    <th>Benefit</th>
+                                    <th>Impact Area</th>
+                                    <th>Entry Date</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,66 +101,196 @@
     <script src="{{ asset('js/datatable_custom.js') }}"></script>
 
     <script type="text/javascript">
+        // $(function() {
+        //     var table = $('#datatable').DataTable({
+        //         processing: true,
+        //         serverSide: true,
+        //         ajax: "{{ route('projects.index') }}",
+        //         columns: [
+        //             // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+        //             {
+        //                 data: 'SoftwareName',
+        //                 name: 'SoftwareName'
+        //             },
+        //             {
+        //                 data: 'Status',
+        //                 name: 'Status'
+        //             },
+
+        //             {
+        //                 data: 'platform_name',
+        //                 name: 'platform_name'
+        //             },
+        //             {
+        //                 data: 'department_name',
+        //                 name: 'department_name'
+        //             },
+        //             {
+        //                 data: 'NumberOfUser',
+        //                 name: 'NumberOfUser'
+        //             },
+        //             {
+        //                 data: 'ImplementationDate',
+        //                 name: 'ImplementationDate'
+        //             },
+        //             {
+        //                 data: 'ContactPerson',
+        //                 name: 'ContactPerson'
+        //             },
+
+        //             {
+        //                 data: 'developer_name',
+        //                 name: 'developer_name'
+        //             },
+        //             {
+        //                 data: 'Description',
+        //                 name: 'Description'
+        //             },
+
+        //             {
+        //                 data: 'DeliveryDate',
+        //                 name: 'DeliveryDate'
+        //             },
+        //             {
+        //                 data: 'AreaOfConcern',
+        //                 name: 'AreaOfConcern'
+        //             },
+        //             {
+        //                 data: 'Benefit',
+        //                 name: 'Benefit',                      
+        //             },
+        //             {
+        //                 data: 'ImpactArea',
+        //                 name: 'ImpactArea'
+        //             },
+        //             {
+        //                 data: 'action',
+        //                 name: 'action',
+        //                 orderable: false,
+        //                 searchable: false
+        //             }
+        //         ],
+        // createdRow: function(row, data, index) {
+        //     $('td', row).eq(4).addClass('text-right');
+
+        // },
+        //         // dom: 'Bfrtip',
+        //         // buttons: [
+        //         //     'copy', 'csv', 'excel', 'print'
+        //         // ]
+        //     });
+
+        // });
+
+        //Added By Mahbub
         $(function() {
-            var table = $('#datatable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: "{{ route('projects.index') }}",
-                columns: [
-                    // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                    {
-                        data: 'SoftwareName',
-                        name: 'SoftwareName'
-                    },
-                    {
-                        data: 'Status',
-                        name: 'Status'
-                    },
 
-                    {
-                        data: 'platform_name',
-                        name: 'platform_name'
-                    },
-                    {
-                        data: 'department_name',
-                        name: 'department_name'
-                    },
-                    {
-                        data: 'NumberOfUser',
-                        name: 'NumberOfUser'
-                    },
-                    {
-                        data: 'ImplementationDate',
-                        name: 'ImplementationDate'
-                    },
-                    {
-                        data: 'ContactPerson',
-                        name: 'ContactPerson'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'developer_name',
-                        name: 'developer_name'
-                    },
-                    {
-                        data: 'Description',
-                        name: 'Description'
-                    },
-                ],
-                createdRow: function(row, data, index) {
-                    $('td', row).eq(4).addClass('text-right');
+            load_data();
 
-                },
-                // dom: 'Bfrtip',
-                // buttons: [
-                //     'copy', 'csv', 'excel', 'print'
-                // ]
+            function load_data(FromDate = '', toDate = '') {
+                var table = $('.table-bordered').DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "responsive": true,
+                    "autoWidth": false,
+                    order: [
+                        [13, 'desc']
+                    ],
+                    ajax: {
+                        url: '{{ route('projects.index') }}',
+                        data: {
+                            FromDate: FromDate,
+                            ToDate: toDate
+                        }
+                    },
+                    columns: [{
+                            data: 'SoftwareName',
+                            name: 'SoftwareName'
+                        },
+                        {
+                            data: 'Status',
+                            name: 'Status'
+                        },
+
+                        {
+                            data: 'platform_name',
+                            name: 'platform_name'
+                        },
+                        {
+                            data: 'department_name',
+                            name: 'department_name'
+                        },
+                        {
+                            data: 'NumberOfUser',
+                            name: 'NumberOfUser'
+                        },
+                        {
+                            data: 'ImplementationDate',
+                            name: 'ImplementationDate'
+                        },
+                        {
+                            data: 'ContactPerson',
+                            name: 'ContactPerson'
+                        },
+
+                        {
+                            data: 'developer_name',
+                            name: 'developer_name'
+                        },
+                        {
+                            data: 'Description',
+                            name: 'Description'
+                        },
+
+                        {
+                            data: 'DeliveryDate',
+                            name: 'DeliveryDate'
+                        },
+                        {
+                            data: 'AreaOfConcern',
+                            name: 'AreaOfConcern'
+                        },
+                        {
+                            data: 'Benefit',
+                            name: 'Benefit',
+                        },
+                        {
+                            data: 'ImpactArea',
+                            name: 'ImpactArea'
+                        },
+                        {
+                            data: 'EntryDate',
+                            name: 'EntryDate'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        }
+                    ],
+                    createdRow: function(row, data, index) {
+                        $('td', row).eq(4).addClass('text-right');
+
+                    },
+                });
+            }
+
+            $('body').on('click', '.filter', function(e) {
+                e.preventDefault();
+
+                var from = $('#FromDate').val();
+                var to = $('#ToDate').val();
+                console.log(from)
+                console.log(to)
+                if (from != '' && to != '') {
+                    $('.table-bordered').DataTable().destroy();
+                    load_data(from, to);
+                } else {
+                    alert('Both Date is required');
+                }
             });
+
 
         });
     </script>

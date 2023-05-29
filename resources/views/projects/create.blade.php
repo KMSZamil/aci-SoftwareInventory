@@ -185,6 +185,37 @@
                                         placeholder="Enter Value" value="" />
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Delivery Date</label>
+                                    <input type="date" class="form-control" name="DeliveryDate"
+                                        {{-- id="datePickerExample" --}} placeholder="Delivery Date" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Area of Concern</label>
+                                    <input type="text" class="form-control" name="Value" id="AreaOfConcern"
+                                        placeholder="Area of Concern" value="" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Benefit</label>
+                                    <input type="text" class="form-control" name="DeliveryDate"
+                                        {{-- id="datePickerExample" --}} placeholder="Benefit" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label">Impact Area</label>
+                                    <input type="text" class="form-control" name="ImpactArea"
+                                        {{-- id="datePickerExample" --}} placeholder="Impact Area" />
+                                </div>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary submit">Submit Software</button>

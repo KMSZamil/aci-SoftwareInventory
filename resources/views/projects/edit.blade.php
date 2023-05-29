@@ -243,6 +243,46 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div id="reload" class="form-group row">
+                                        <div id='category_div' style="border: #0000FF 0px solid; float: left; width: 100%;">
+                                            <div style="border: 0px solid #d1dceb; float: left; width: 99%; background-color: #e8ebf0;">
+                                                <div style="border: #0000FF 0px solid; float: left; width: 100%; ">
+                                                    <div style="float: left; width:100%; padding: 5px; padding-left: 5px; border-right: 1px solid #bbb;">Modification</div>
+                                                </div>
+                                            </div>
+                                            <div style="border: 0px solid #d1dceb; float: left; width: 99%;">
+                                                <div style="border: #0000FF 0px solid; float: left; width: 100%;">
+                                                    <input type="text" style="float: left; width:100%; font-size:12px;" class="form-control typeahead" id="inputDistributor" name="Modification[]" placeholder="Modification" required>
+                                                    <input type="hidden" style="float: left;" class="form-control" id="
+                                                    " name="DistributorCode[]">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>&nbsp;</div>
+                                        <div style="border: #f00 0px solid; float: left; width: 99%; margin-top: 15px;">
+                                            <div style="border: #f00 0px solid; float: right;">
+                                                <div class="form-row" style="padding-top: 30px;">
+                                                    <div class="col">
+                                                        <a id="addButton" href="javascript:;" class="btn btn-success">
+                                                            &nbsp;&nbsp;Add&nbsp;&nbsp;
+                                                        </a>
+                                                        <a id="removeButton" href="javascript:;" class="btn btn-danger">
+                                                            Remove
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>&nbsp;</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn btn-primary submit">Update Software</button>
                     </form>
                 </div>
@@ -266,4 +306,91 @@
             $('.select2Single').select2();
         });
     </script>
+        <script>
+            $( function() {
+                $( "#inputDistributor" ).autocomplete({
+                    source: function( request, response ) {
+                        $.ajax({
+                            url: "",
+                            type: 'post',
+                            dataType: "json",
+                            data: {
+                                search: request.term,
+                                _token : $('meta[name=\'csrf-token\']').attr('content')
+                            },
+                            success: function( data ) {
+                                //console.log(data);
+                                response( data );
+                            }
+                        });
+                    },
+                    select: function (event, ui) {
+                        $('#inputDistributor').val(ui.item.label);
+                        $('#DistributorCode_1').val(ui.item.DistributorCode);
+                        return false;
+                    }
+                });
+            });
+        </script>
+    
+        <script>
+            $count = 2;
+            $(function () {
+                $('#addButton').click(function(){
+                    $category = $("<div id='TextBoxDiv"+$count+"' style='border: 0px solid #d1dceb; float: left; width: 99%;'>\n\
+                            <div style='border: #0000FF 0px solid; float: left; width: 100%;'>\n\
+                            <input type='text' style='float: left; width:100%; font-size:12px;' class='form-control typeahead' id='inputDistributor_" + $count + "' name='Modification[]' placeholder='Modification' required>\n\
+                            <input type='hidden' style='float: left;' class='form-control' id='DistributorCode_" + $count + "' name='DistributorCode[]'>\n\
+                            </div>\n\
+                        </div>");
+    
+                    $('#category_div').append($category);
+    
+                    $('.typeahead').click(function ()
+                    {
+                        //alert("dd");
+                        var ProductCodeIdString = $(this).attr('id');
+                        var ProductCodeIdNo = ProductCodeIdString.substr(ProductCodeIdString.indexOf("_") + 1);
+    
+                        $( "#inputDistributor_" + ProductCodeIdNo  ).autocomplete({
+                            source: function( request, response ) {
+                                $.ajax({
+                                    url: "",
+                                    type: 'post',
+                                    dataType: "json",
+                                    data: {
+                                        search: request.term,
+                                        _token : $('meta[name=\'csrf-token\']').attr('content')
+                                    },
+                                    success: function( data ) {
+                                        //console.log(data);
+                                        response( data );
+                                    }
+                                });
+                            },
+                            select: function (event, ui) {
+                                $('#inputDistributor_'+ProductCodeIdNo).val(ui.item.label);
+                                $('#DistributorCode_'+ProductCodeIdNo).val(ui.item.DistributorCode);
+                                return false;
+                            }
+                        });
+                    });   
+    
+                    $count++;
+                });
+    
+                $("#removeButton").click(function () {
+                    if ($count == 1) {
+                        alert("No more textbox to remove");
+                        return false;
+                    }
+                    $count--;
+                    $("#TextBoxDiv" + $count).remove();
+                    $("#TextBoxDiv" + $count).hide();
+                    calcTotal();
+                });
+    
+            });
+    
+        </script>
 @endpush

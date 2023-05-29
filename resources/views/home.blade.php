@@ -23,15 +23,19 @@
                                 <h6 class="card-title mb-0">New Project</h6>
 
                             </div>
+
+                            
                             <div class="row">
-                                <div class="col-6 col-md-12 col-xl-5">
-                                    <h3 class="mb-2 pt-4">{{ number_format(get_project_count(1)) }}</h3>
-                                    <div class="d-flex align-items-baseline">
-                                        <p class="text-success">
-                                            <span></span>
-                                        </p>
+                                <a href="{{ route('my_project.platform_wise', 1) }}">
+                                    <div class="col-6 col-md-12 ">
+                                        <h3 class="mb-2 pt-4">{{ number_format(get_project_count(1)) }}</h3>
+                                        <div class="d-flex align-items-baseline">
+                                            <p class="text-success">
+                                                <span></span>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -44,14 +48,16 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-6 col-md-12 col-xl-5">
-                                    <h3 class="mb-2 pt-4">{{ number_format(get_project_count(4)) }}</h3>
-                                    <div class="d-flex align-items-baseline">
-                                        <p class="text-success">
-                                            <span></span>
-                                        </p>
+                                <a href="{{ route('my_project.platform_wise', 2) }}">
+                                    <div class="col-6 col-md-12 ">
+                                        <h3 class="mb-2 pt-4">{{ number_format(get_project_count(4)) }}</h3>
+                                        <div class="d-flex align-items-baseline">
+                                            <p class="text-success">
+                                                <span></span>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>   
                             </div>
                         </div>
                     </div>
@@ -64,14 +70,16 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-6 col-md-12 col-xl-5">
-                                    <h3 class="mb-2 pt-4">{{ number_format(get_project_count(2)) }}</h3>
-                                    <div class="d-flex align-items-baseline">
-                                        <p class="text-success">
-                                            <span></span>
-                                        </p>
+                                <a href="{{ route('my_project.platform_wise', 3) }}">
+                                    <div class="col-6 col-md-12 ">
+                                        <h3 class="mb-2 pt-4">{{ number_format(get_project_count(2)) }}</h3>
+                                        <div class="d-flex align-items-baseline">
+                                            <p class="text-success">
+                                                <span></span>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>    
                             </div>
                         </div>
                     </div>
@@ -84,14 +92,16 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-6 col-md-12 col-xl-5">
-                                    <h3 class="mb-2 pt-4">{{ number_format(get_project_count(3)) }}</h3>
-                                    <div class="d-flex align-items-baseline">
-                                        <p class="text-success">
-                                            <span></span>
-                                        </p>
+                                <a href="{{ route('my_project.platform_wise', 2) }}">
+                                    <div class="col-6 col-md-12 ">
+                                        <h3 class="mb-2 pt-4">{{ number_format(get_project_count(3)) }}</h3>
+                                        <div class="d-flex align-items-baseline">
+                                            <p class="text-success">
+                                                <span></span>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>  
                             </div>
                         </div>
                     </div>

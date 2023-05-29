@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ProjectsExport;
-use App\Models\Department;
-use App\Models\Developer;
-use App\Models\Platform;
-use App\Models\Project;
-use App\Models\SoftwareDepartment;
-use App\Models\SoftwareDeveloper;
-use App\Models\SoftwarePlatform;
+use Carbon\Carbon;
 use App\Models\Status;
+use App\Models\Project;
+use App\Models\Platform;
+use App\Models\Developer;
 use App\Models\TimeFrame;
-use Brian2694\Toastr\Facades\Toastr;
+use App\Models\Department;
 use Illuminate\Http\Request;
+use App\Exports\ProjectsExport;
+use App\Models\SoftwarePlatform;
+use App\Models\SoftwareDeveloper;
+use App\Models\SoftwareDepartment;
+use App\Models\ProjectModification;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -31,10 +33,15 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        //$data = Project::with('platforms.platform_name', 'departments.department_name', 'developers.developer_name')->get();
-        //dd($data);
+        //dd($request->ToDate);
+        $FromDate = $request->FromDate ?: '1900-01-01'; // date('Y-m-01');
+        $TtoDate = ($request->ToDate == null) ? date('Y-m-d') : $request->ToDate;
+        $ToDate = $TtoDate . ' 23:59:59';
+        //dd($ToDate);
+        //$data = Project::with('platforms.platform_name', 'departments.department_name', 'developers.developer_name')->whereBetween('EntryDate', [$FromDate, $ToDate])->get();
+        // return $data;
         if ($request->ajax()) {
-            $data = Project::with('platforms.platform_name', 'departments.department_name', 'developers.developer_name')->get();
+            $data = Project::with('platforms.platform_name', 'departments.department_name', 'developers.developer_name')->whereBetween('EntryDate', [$FromDate, $ToDate])->get();
             return Datatables::of($data)
                 ->addColumn('Status', function ($row) {
                     if ($row->StatusID == 4) {
@@ -87,7 +94,10 @@ class ProjectController extends Controller
                     return $sub;
                 })
                 ->addColumn('ImplementationDate', function ($row) {
-                    return $row->ImplementationDate != '1970-01-01 00:00:00.000' ? date("Y-m-d", strtotime($row->ImplementationDate)) : '';
+                    return (($row->ImplementationDate == '1970-01-01 00:00:00.000') || ($row->ImplementationDate == null)) ? '' : date("Y-m-d", strtotime($row->ImplementationDate));
+                })
+                ->addColumn('EntryDate', function ($row) {
+                    return (($row->EntryDate != '1970-01-01 00:00:00.000') || ($row->EntryDate != null)) ? '' : date("Y-m-d", strtotime($row->EntryDate));
                 })
                 ->addColumn('Description', function ($row) {
                     return isset($row->Description) ? \Str::limit($row->Description, 50, '...') : '';
@@ -161,6 +171,13 @@ class ProjectController extends Controller
         $project->StatusID = isset($request->StatusID) ? $request->StatusID : '';
         $project->Value = isset($request->Value) ? $request->Value : 0;
         $project->TimeFrameID = isset($request->TimeFrameID) ? $request->TimeFrameID : 0;
+
+        // added by Mahbub for modification of create
+        $project->DeliveryDate = isset($request->DeliveryDate) ? date("Y-m-d", strtotime($request->DeliveryDate)) : null;
+        $project->AreaOfConcern = isset($request->AreaOfConcern) ? $request->AreaOfConcern : '';
+        $project->Benefit = isset($request->Benefit) ? $request->Benefit : '';
+        $project->ImpactArea = isset($request->ImpactArea) ? $request->ImpactArea : 0;
+
         $project->EntryBy = Auth::user()->UserID;
         //dd($project->save());
         if ($project->save() == true) {
@@ -207,6 +224,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+
         $status = Status::all();
         $platform = Platform::all();
         $developers = Developer::all();
@@ -216,6 +234,10 @@ class ProjectController extends Controller
         $user_platform = SoftwarePlatform::where('SoftwareID', $project->SoftwareID)->get();
         $user_developers = SoftwareDeveloper::where('SoftwareID', $project->SoftwareID)->get();
         $user_departments = SoftwareDepartment::where('SoftwareID', $project->SoftwareID)->get();
+        //added by Mahbub
+        $software_modification = ProjectModification::where('SoftwareID', $project->SoftwareID)->get();
+
+        // dd($software_modification);        
 
 
         return view('projects.show', compact('project', 'status', 'platform', 'developers', 'departments', 'time_frame', 'user_platform', 'user_developers', 'user_departments'));
@@ -243,9 +265,9 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Project $project)
+    public function update(Request $request, Project $project, ProjectModification $projectModification)
     {
-        //dd($request->all());
+        // dd($request->all());
         $this->validate($request, [
             'SoftwareName' => 'required',
             'SoftwarePlatform' => 'required',
@@ -263,8 +285,28 @@ class ProjectController extends Controller
         $project->StatusID = isset($request->StatusID) ? $request->StatusID : '';
         $project->Value = isset($request->Value) ? $request->Value : 0;
         $project->TimeFrameID = isset($request->TimeFrameID) ? $request->TimeFrameID : 0;
+
+        // added by Mahbub
+        $project->DeliveryDate = isset($request->DeliveryDate) ? date("Y-m-d", strtotime($request->DeliveryDate)) : null;
+        $project->AreaOfConcern = isset($request->AreaOfConcern) ? $request->AreaOfConcern : '';
+        $project->Benefit = isset($request->Benefit) ? $request->Benefit : '';
+        $project->ImpactArea = isset($request->ImpactArea) ? $request->ImpactArea : 0;
+
+
         $project->EntryBy = Auth::user()->UserID;
         if ($project->save() == true) {
+
+            // project modification list added with date here
+            for ($i = 0; $i < count($request->Modification); $i++) { //Modification is the key that comes with request
+                $ProjectModification = new ProjectModification();
+                $ProjectModification->SoftwareID = $SoftwareID;
+                $ProjectModification->ModificationDetail = $request->Modification[$i];
+                $ProjectModification->ModificationDate =   Carbon::now()->toDateString();
+                $ProjectModification->updated_at =   Carbon::now()->toDateString();
+                $ProjectModification->created_at =   Carbon::now()->toDateString();
+                $ProjectModification->save();
+            }
+
             SoftwarePlatform::where('SoftwareID', $SoftwareID)->delete();
             for ($i = 0; $i < count($request->SoftwarePlatform); $i++) {
                 $software_platform = new SoftwarePlatform();
