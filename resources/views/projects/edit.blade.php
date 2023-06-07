@@ -256,7 +256,7 @@
                                             </div>
                                             <div style="border: 0px solid #d1dceb; float: left; width: 99%;">
                                                 <div style="border: #0000FF 0px solid; float: left; width: 100%;">
-                                                    <input type="text" style="float: left; width:100%; font-size:12px;" class="form-control typeahead" id="inputDistributor" name="Modification[]" placeholder="Modification" required>
+                                                    <input type="text" style="float: left; width:100%; font-size:12px;" class="form-control typeahead" id="inputDistributor" name="Modification[]" placeholder="Modification">
                                                     <input type="hidden" style="float: left;" class="form-control" id="
                                                     " name="DistributorCode[]">
                                                 </div>

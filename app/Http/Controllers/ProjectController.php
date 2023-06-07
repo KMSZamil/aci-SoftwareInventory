@@ -297,14 +297,16 @@ class ProjectController extends Controller
         if ($project->save() == true) {
 
             // project modification list added with date here
-            for ($i = 0; $i < count($request->Modification); $i++) { //Modification is the key that comes with request
-                $ProjectModification = new ProjectModification();
-                $ProjectModification->SoftwareID = $SoftwareID;
-                $ProjectModification->ModificationDetail = $request->Modification[$i];
-                $ProjectModification->ModificationDate =   Carbon::now()->toDateString();
-                $ProjectModification->updated_at =   Carbon::now()->toDateString();
-                $ProjectModification->created_at =   Carbon::now()->toDateString();
-                $ProjectModification->save();
+            if (isset($request->Modification)) {
+                for ($i = 0; $i < count($request->Modification); $i++) { //Modification is the key that comes with request
+                    $ProjectModification = new ProjectModification();
+                    $ProjectModification->SoftwareID = $SoftwareID;
+                    $ProjectModification->ModificationDetail = isset($request->Modification[$i]) ? $request->Modification[$i] : '';
+                    $ProjectModification->ModificationDate =   Carbon::now()->toDateString();
+                    $ProjectModification->updated_at =   Carbon::now()->toDateString();
+                    $ProjectModification->created_at =   Carbon::now()->toDateString();
+                    $ProjectModification->save();
+                }
             }
 
             SoftwarePlatform::where('SoftwareID', $SoftwareID)->delete();
